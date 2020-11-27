@@ -1,0 +1,73 @@
+version: "3"
+
+services:
+  namenode:
+    image: ${DOCKER_REPO}hadoop-namenode:${DOCKER_TAG}
+    container_name: namenode
+    restart: always
+    ports:
+      - 9870:9870
+      - 9000:9000
+    volumes:
+      - hadoop_namenode:/hadoop/dfs/name
+      - ${PWD}/conf/core-site.xml:/etc/hadoop/core-site.xml
+      - ${PWD}/conf/hdfs-site.xml:/etc/hadoop/hdfs-site.xml
+      - ${PWD}/conf/yarn-site.xml:/etc/hadoop/yarn-site.xml
+      - ${PWD}/conf/mapred-site.xml:/etc/hadoop/mapred-site.xml
+    environment:
+      - CLUSTER_NAME=test
+
+  datanode:
+    image: ${DOCKER_REPO}hadoop-datanode:${DOCKER_TAG}
+    container_name: datanode
+    restart: always
+    volumes:
+      - hadoop_datanode:/hadoop/dfs/data
+      - ${PWD}/conf/core-site.xml:/etc/hadoop/core-site.xml
+      - ${PWD}/conf/hdfs-site.xml:/etc/hadoop/hdfs-site.xml
+      - ${PWD}/conf/yarn-site.xml:/etc/hadoop/yarn-site.xml
+      - ${PWD}/conf/mapred-site.xml:/etc/hadoop/mapred-site.xml
+    depends_on: 
+      - namenode
+  
+  resourcemanager:
+    image: ${DOCKER_REPO}hadoop-resourcemanager:${DOCKER_TAG}
+    container_name: resourcemanager
+    restart: always
+    depends_on: 
+      - namenode
+      - datanode
+
+  nodemanager1:
+    image: ${DOCKER_REPO}hadoop-nodemanager:${DOCKER_TAG}
+    container_name: nodemanager
+    restart: always
+    volumes: 
+      - ${PWD}/conf/core-site.xml:/etc/hadoop/core-site.xml
+      - ${PWD}/conf/hdfs-site.xml:/etc/hadoop/hdfs-site.xml
+      - ${PWD}/conf/yarn-site.xml:/etc/hadoop/yarn-site.xml
+      - ${PWD}/conf/mapred-site.xml:/etc/hadoop/mapred-site.xml
+    depends_on: 
+      - namenode
+      - datanode
+      - resourcemanager
+  
+  historyserver:
+    image: ${DOCKER_REPO}hadoop-historyserver:${DOCKER_TAG}
+    container_name: historyserver
+    restart: always
+    depends_on: 
+      - namenode
+      - datanode
+      - resourcemanager
+    volumes:
+      - hadoop_historyserver:/hadoop/yarn/timeline
+      - ${PWD}/conf/core-site.xml:/etc/hadoop/core-site.xml
+      - ${PWD}/conf/hdfs-site.xml:/etc/hadoop/hdfs-site.xml
+      - ${PWD}/conf/yarn-site.xml:/etc/hadoop/yarn-site.xml
+      - ${PWD}/conf/mapred-site.xml:/etc/hadoop/mapred-site.xml
+
+volumes:
+  hadoop_namenode:
+  hadoop_datanode:
+  hadoop_historyserver:
