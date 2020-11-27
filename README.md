@@ -10,6 +10,14 @@ It is inspired by the [big-data-europe/docker-hadoop](https://github.com/big-dat
 
 - `build_scripts/`: scripts for building
 - `base/`: base docker image, install jdk & hadoop
+- `conf/`: hadoop's xml configuration files which should be place under hadoop containers' /etc/hadoop
+- `datanode/`: docker image for hadoop datanode
+- `namenode/`: docker image for hadoop namenode
+- `nodemanager/`: docker image for hadoop nodemanager
+- `resourcemanager/`: docker image for hadoop resourcemanager
+- `submit/`: example docker image to submit hadoop application, wordcount.jar
+- `test_scripts/`: scripts for running example, e.g., wordcount
+- `.env`: dotenv config file for building/running
 
 ## Change as you need
 
