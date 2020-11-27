@@ -6,8 +6,7 @@ services:
     container_name: namenode
     restart: always
     ports:
-      - 9870:9870
-      - 9000:9000
+      - ${NAMENODE_PORT_INTERNAL}:${NAMENODE_PORT_INTERNAL}
     volumes:
       - hadoop_namenode:/hadoop/dfs/name
       - ${PWD}/conf/core-site.xml:/etc/hadoop/core-site.xml
@@ -21,6 +20,8 @@ services:
     image: ${DOCKER_REPO}hadoop-datanode:${DOCKER_TAG}
     container_name: datanode
     restart: always
+    ports:
+      - ${DATANODE_PORT_INTERNAL}:${DATANODE_PORT_INTERNAL}
     volumes:
       - hadoop_datanode:/hadoop/dfs/data
       - ${PWD}/conf/core-site.xml:/etc/hadoop/core-site.xml
@@ -34,6 +35,8 @@ services:
     image: ${DOCKER_REPO}hadoop-resourcemanager:${DOCKER_TAG}
     container_name: resourcemanager
     restart: always
+    ports:
+      - ${RESOURCEMANAGER_PORT_INTERNAL}:${RESOURCEMANAGER_PORT_INTERNAL}
     depends_on: 
       - namenode
       - datanode
@@ -42,6 +45,8 @@ services:
     image: ${DOCKER_REPO}hadoop-nodemanager:${DOCKER_TAG}
     container_name: nodemanager
     restart: always
+    ports:
+      - ${NODEMANAGER_PORT_INTERNAL}:${NODEMANAGER_PORT_INTERNAL}
     volumes: 
       - ${PWD}/conf/core-site.xml:/etc/hadoop/core-site.xml
       - ${PWD}/conf/hdfs-site.xml:/etc/hadoop/hdfs-site.xml
@@ -60,6 +65,8 @@ services:
       - namenode
       - datanode
       - resourcemanager
+    ports:
+      - ${HISTORYSERVER_PORT_INTERNAL}:${HISTORYSERVER_PORT_INTERNAL}
     volumes:
       - hadoop_historyserver:/hadoop/yarn/timeline
       - ${PWD}/conf/core-site.xml:/etc/hadoop/core-site.xml
