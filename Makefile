@@ -52,3 +52,7 @@ deploy:
 .PHONY: undeploy
 undeploy:
 	docker-compose --env-file .env -f docker-compose.yml down
+
+.PHONY: wordcount
+wordcount:
+	./test_scripts/run_wordcount.sh

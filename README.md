@@ -98,3 +98,8 @@ Run `docker network inspect` on the network (e.g. `dockerhadoop_default`) to fin
 - Datanode: http://<dockerhadoop_IP_address>:9864/
 - Nodemanager: http://<dockerhadoop_IP_address>:8042/node
 - Resource manager: http://<dockerhadoop_IP_address>:8088/
+
+To test running the example wordcount job
+```bash
+make wordcount
+```
